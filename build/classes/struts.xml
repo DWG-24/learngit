@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+    
+    
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.action.extension" value="action,," />
+    <constant name="struts.ui.theme" value="simple" />
+
+    <package name="demo1" namespace="/dwg" extends="struts-default">
+    	<!-- <action name="strutsDemo1" class="com.njtech.struts.action.StrutsDemo1">
+    		<result name="success">/demo1/index.jsp</result>
+    	</action>
+    	<action name="sa" class="com.njtech.struts.action.StrutsDemo1" method="save">
+    		<result name="none">/</result>
+    	</action> -->
+    	<action name="struts_*" class="com.njtech.struts.action.StrutsDemo1" method="{1}">
+    		<result name="success" type="redirect">/demo1/redirect.jsp</result>
+    		<result name="none" type="dispatcher">/demo1/index.jsp</result>
+    		<result name="toAction" type="chain">
+    			<param name="actionName">testChain</param>
+    			<param name="namespace">/lw</param>
+			</result>
+    	</action>
+    </package>
+    
+    <package name="demo2" namespace="/lw" extends="struts-default">
+    	<action name="testChain" class="com.njtech.struts.action.StrutsDemo2">
+    		<result name="success">/demo1/redirect.jsp</result>
+    	</action>
+    </package>
+    
+    <package name="demo3" namespace="/" extends="struts-default">
+    	<action name="reg" class="com.njtech.struts.action.StrutsDemo3" method="">
+    		<result name="success" >/demo1/index.jsp</result>
+    		<result name="none" >/demo1/index.jsp</result>
+    	</action>
+    </package>
+    
+    <package name="demo5" namespace="/" extends="struts-default">
+    	<action name="testOgnl" class="com.njtech.struts.action.StrutsDemo5" method="">
+    		<result name="success" type="redirectAction" >
+    			<param name="actionName">getReq</param>
+    			<param name="namespace">/</param>
+    			<param name="post">${post}</param>
+    			<param name="name">${name}</param>
+    			<param name="name1">${[2].name}</param>
+    			<param name="age">${age}</param>
+    		</result>
+    		<result name="none" >/demo1/index.jsp</result>
+    	</action>
+    	<action name="getReq" class="com.njtech.struts.action.StrutsDemo5" method="getRequest">
+    		<result name="success">
+    			/demo1/index.jsp
+    		</result>
+    	</action>
+    </package>
+    
+    <package name="demo6" namespace="/" extends="struts-default">
+    	<interceptors>
+    		<interceptor name="firstInterceptor" class="com.njtech.struts.action.MyInterceptor1"></interceptor>
+    		<interceptor name="secondInterceptor" class="com.njtech.struts.action.MyInterceptor2"></interceptor>
+    		<interceptor name="thirdInterceptor" class="com.njtech.struts.action.MyInterceptor3"></interceptor>
+    		
+    		<interceptor-stack name="myStack">
+    			<interceptor-ref name="defaultStack"></interceptor-ref>
+    			<interceptor-ref name="secondInterceptor"></interceptor-ref>
+    			<interceptor-ref name="firstInterceptor"></interceptor-ref>
+    		</interceptor-stack>
+    	</interceptors>
+    
+    	<action name="myInterceptor" class="com.njtech.struts.action.App" method="interceptorTest">
+    		<!-- <interceptor-ref name="myStack"></interceptor-ref> -->
+    		<interceptor-ref name="defaultStack"></interceptor-ref>
+    		<interceptor-ref name="thirdInterceptor"></interceptor-ref>
+    		<interceptor-ref name="firstInterceptor"></interceptor-ref>
+    		<result name="success">/demo1/index.jsp</result>
+    	</action>
+    </package>
+   
+    <!-- <include file="com/njtech/struts/xml/part.xml"></include> -->
+</struts>
