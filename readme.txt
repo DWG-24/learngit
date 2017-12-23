@@ -1,5 +1,4 @@
 Creating a new branch is quick and simple.
 hello,world
-
-added in dev
-dev2
+edit on github
+conflict fixed
